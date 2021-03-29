@@ -2,4 +2,4 @@
 .go-version
 
 # binary
-redigo-trial
+/bin
