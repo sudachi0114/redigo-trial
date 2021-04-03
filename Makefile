@@ -19,6 +19,6 @@ compose/up/redis: compose/down
 compose/down:
 	docker-compose down
 
-.PHONY: compose/build/app
-compose/build/app:
+.PHONY: compose/build
+compose/build:
 	docker-compose build app
