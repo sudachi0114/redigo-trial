@@ -117,3 +117,7 @@ $ go get github.com/gomodule/redigo/redis
 ## Links
 * [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
 * [GoでRedisをかるーくいじってみた](https://qiita.com/akubi0w1/items/8701c05fe7186ceee632)
+
+### Redis
+* [Redisの起動と停止](https://qiita.com/horiko/items/bc812a03c9e0566d6338)
+* [Redisで発生したメモリ不足エラーの調査メモ](http://www.24w.jp/blog/?p=82)
