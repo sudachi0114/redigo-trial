@@ -1,48 +1,29 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-
-	"github.com/gomodule/redigo/redis"
+	"os"
 )
 
 func main() {
-	fmt.Println("Redigo trial.")
-	c := Connection()
-	defer c.Close()
+	prompt := "(屮`･д･)屮 "
+	bio := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print(prompt)
 
-	// SET key
-	res_set := Set("hoge", "fuga", c)
-	fmt.Println(res_set)
+		line, _, err := bio.ReadLine()
+		maybeMessage := string(line)
 
-	// GET key
-	res_get := Get("hoge", c)
-	fmt.Println(res_get)
-}
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-func Connection() redis.Conn {
-	const Addr = "redis:6379"
-
-	c, err := redis.Dial("tcp", Addr)
-	if err != nil {
-		panic(err)
+		if maybeMessage == ".exit" {
+			return
+		} else {
+			fmt.Println(maybeMessage)
+		}
 	}
-	fmt.Println("Succesfly Connect to redis @", Addr)
-	return c
-}
-
-func Get(key string, c redis.Conn) string {
-	res, err := redis.String(c.Do("GET", key))
-	if err != nil {
-		panic(err)
-	}
-	return res
-}
-
-func Set(key, value string, c redis.Conn) string {
-	res, err := redis.String(c.Do("SET", key, value))
-	if err != nil {
-		panic(err)
-	}
-	return res
 }

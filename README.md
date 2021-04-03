@@ -78,30 +78,37 @@ $ go get github.com/gomodule/redigo/redis
 
 ## execution
 
-* コンテナを作る
-
-```
-$ make compose/up
+```shell
+$ make compose/up/sh
 ```
 
-* 実行
+* 使用例 (現在はおうむ返しするだけ)
 
 ```
-$ make
+# ... (略)
+
+/app # make
+go build -o bin/main .
+./bin/main
+(屮`･д･)屮 hoge
+hoge
+(屮`･д･)屮 fuga
+fuga
+(屮`･д･)屮 piyo
+piyo
+(屮`･д･)屮 nyan
+nyan
+(屮`･д･)屮 exit
+exit
+(屮`･д･)屮 .exit
+/app # exit
+sudachi@DaiMac:redigo-trial (develop *)
+(*'-') < 
 ```
 
-* 現状、実行結果は app の log に出てくる
+これをチャットとして使えるようにしていく。
+[参考](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)を写経しながら
 
-```
-$ docker-compose logs app
-Attaching to redigo-trial_app_1
-app_1    |go build -o bin/main .
-app_1    |./bin/main
-app_1    |Redigo trial.
-app_1    |Succesfly Connect to redis @ redis:6379
-app_1    |OK
-app_1    |fuga
-```
 
 ## Links
 * [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
