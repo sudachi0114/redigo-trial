@@ -27,6 +27,14 @@ Or, if you don't want/need a background service you can just run:
 
 ```
 
+### Install Redigo
+
+Redis client library for go
+
+```shell
+$ go get github.com/gomodule/redigo/redis
+```
 
 ## Links
-* [https://medium.com/eureka-engineering/go-redis-application-28c8c793a652](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
+* [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
+* [GoでRedisをかるーくいじってみた](https://qiita.com/akubi0w1/items/8701c05fe7186ceee632)
