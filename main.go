@@ -10,6 +10,10 @@ func main() {
 	fmt.Println("Redigo trial.")
 	c := Connection()
 	defer c.Close()
+
+	// GET key
+	res_get := Get("hoge", c)
+	fmt.Println(res_get)
 }
 
 func Connection() redis.Conn {
@@ -21,4 +25,12 @@ func Connection() redis.Conn {
 	}
 	fmt.Println("Succesfly Connect to redis @", Addr)
 	return c
+}
+
+func Get(key string, c redis.Conn) string {
+	res, err := redis.String(c.Do("GET", key))
+	if err != nil {
+		panic(err)
+	}
+	return res
 }
