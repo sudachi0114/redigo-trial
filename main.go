@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	prompt := ">>> "
+	prompt := "(屮`･д･)屮 "
 	bio := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print(prompt)
