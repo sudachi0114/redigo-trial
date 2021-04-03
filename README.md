@@ -50,59 +50,21 @@ make: *** [run] Error 2
 ```
 
 
-### Create redis container by docker
+### Create redis container by docker-compose
 
-docker で立てる方式に切り替える
+`docker-compose` で Redis コンテナを用意する。
+Go のサービスと合わせて使うため。
 
 * コンテナ作成
 
 ```shell
-$ docker run -d -p 6379:6379 --name myredis redis
+$ make compose/up
 ```
 
 * 接続
 
 ```
-$ docker exec -it myredis bash
-
-root@14ab4257e657:/data# redis-
-redis-benchmark  redis-check-aof  redis-check-rdb  redis-cli        redis-sentinel   redis-server     
-
-root@14ab4257e657:/data# redis-server 
-37:C 03 Apr 2021 03:12:08.245 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
-37:C 03 Apr 2021 03:12:08.245 # Redis version=6.0.9, bits=64, commit=00000000, modified=0, pid=37, just started
-37:C 03 Apr 2021 03:12:08.245 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
-37:M 03 Apr 2021 03:12:08.247 # Could not create server TCP listening socket *:6379: bind: Address already in use
-
-root@14ab4257e657:/data# redis-cli 
-127.0.0.1:6379> KEYS *
-(empty array)
-127.0.0.1:6379> 
-127.0.0.1:6379> 
-127.0.0.1:6379> exit
-root@14ab4257e657:/data# exit
-exit
-```
-
-* 実行 (SET と GET)
-
-```shell
-$ go run main.go
-Redigo trial.
-Succesfly Connect to redis @ 127.0.0.1:6379
-OK
-fuga
-```
-
-* 実行後
-
-```
-$ docker exec -it myredis bash
-root@14ab4257e657:/data# redis-cli 
-127.0.0.1:6379> KEYS *
-1) "hoge"
-127.0.0.1:6379> GET hoge
-"fuga"
+$ docker-compose exec redis bash
 ```
 
 
@@ -112,6 +74,20 @@ Redis client library for go
 
 ```shell
 $ go get github.com/gomodule/redigo/redis
+```
+
+## execution
+
+* コンテナを作る
+
+```
+$ make compose/up
+```
+
+* 実行
+
+```
+$ make
 ```
 
 ## Links
