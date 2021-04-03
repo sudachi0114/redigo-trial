@@ -3,3 +3,6 @@
 
 # binary
 /bin
+
+# Database
+/docker
