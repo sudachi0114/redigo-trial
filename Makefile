@@ -11,6 +11,10 @@ build:
 compose/up: compose/up/redis
 	docker-compose up -d app
 
+.PHONY: compose/up/sh
+compose/up/sh: compose/up
+	docker-compose exec app sh
+
 .PHONY: compose/up/redis
 compose/up/redis: compose/down
 	docker-compose up -d redis
