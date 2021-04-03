@@ -7,14 +7,13 @@ build:
 	go build -o bin/main .
 
 
-.PHONY: container/redis
-container/redis:
-	docker run -d -p 6379:6379 --name myredis redis
+.PHONY: compose/up
+compose/up: compose/up/redis
 
-.PHONY: container/redis/console
-container/redis/console:
-	docker exec -it myredis bash
+.PHONY: compose/up/redis
+compose/up/redis: compose/down
+	docker-compose up -d redis
 
-.PHONY: container/redis/rm
-container/redis/rm:
-	docker stop myredis && docker rm myredis
+.PHONY: compose/down
+compose/down:
+	docker-compose down
