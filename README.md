@@ -50,59 +50,21 @@ make: *** [run] Error 2
 ```
 
 
-### Create redis container by docker
+### Create redis container by docker-compose
 
-docker で立てる方式に切り替える
+`docker-compose` で Redis コンテナを用意する。
+Go のサービスと合わせて使うため。
 
 * コンテナ作成
 
 ```shell
-$ docker run -d -p 6379:6379 --name myredis redis
+$ make compose/up
 ```
 
 * 接続
 
 ```
-$ docker exec -it myredis bash
-
-root@14ab4257e657:/data# redis-
-redis-benchmark  redis-check-aof  redis-check-rdb  redis-cli        redis-sentinel   redis-server     
-
-root@14ab4257e657:/data# redis-server 
-37:C 03 Apr 2021 03:12:08.245 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
-37:C 03 Apr 2021 03:12:08.245 # Redis version=6.0.9, bits=64, commit=00000000, modified=0, pid=37, just started
-37:C 03 Apr 2021 03:12:08.245 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
-37:M 03 Apr 2021 03:12:08.247 # Could not create server TCP listening socket *:6379: bind: Address already in use
-
-root@14ab4257e657:/data# redis-cli 
-127.0.0.1:6379> KEYS *
-(empty array)
-127.0.0.1:6379> 
-127.0.0.1:6379> 
-127.0.0.1:6379> exit
-root@14ab4257e657:/data# exit
-exit
-```
-
-* 実行 (SET と GET)
-
-```shell
-$ go run main.go
-Redigo trial.
-Succesfly Connect to redis @ 127.0.0.1:6379
-OK
-fuga
-```
-
-* 実行後
-
-```
-$ docker exec -it myredis bash
-root@14ab4257e657:/data# redis-cli 
-127.0.0.1:6379> KEYS *
-1) "hoge"
-127.0.0.1:6379> GET hoge
-"fuga"
+$ docker-compose exec redis bash
 ```
 
 
@@ -114,6 +76,33 @@ Redis client library for go
 $ go get github.com/gomodule/redigo/redis
 ```
 
+## execution
+
+* コンテナを作る
+
+```
+$ make compose/up
+```
+
+* 実行
+
+```
+$ make
+```
+
+* 現状、実行結果は app の log に出てくる
+
+```
+$ docker-compose logs app
+Attaching to redigo-trial_app_1
+app_1    |go build -o bin/main .
+app_1    |./bin/main
+app_1    |Redigo trial.
+app_1    |Succesfly Connect to redis @ redis:6379
+app_1    |OK
+app_1    |fuga
+```
+
 ## Links
 * [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
 * [GoでRedisをかるーくいじってみた](https://qiita.com/akubi0w1/items/8701c05fe7186ceee632)
@@ -121,3 +110,11 @@ $ go get github.com/gomodule/redigo/redis
 ### Redis
 * [Redisの起動と停止](https://qiita.com/horiko/items/bc812a03c9e0566d6338)
 * [Redisで発生したメモリ不足エラーの調査メモ](http://www.24w.jp/blog/?p=82)
+
+### docker-compose
+* [docker-composeでredis環境をつくる](https://qiita.com/uggds/items/5e4f8fee180d77c06ee1)
+* [Docker(+ Docker-Compose) に Redis を入れる](https://qiita.com/bonkoturyu/items/5e7e743b359ce63767a2)
+
+### docker-compose go <-> redis
+* [[Docker] golangとredisのコンテナを繋いでみた](https://shamaton.orz.hm/blog/archives/310)
+* [Docker環境下でGoとRedisでAPIを実装する (Part.1)](https://qiita.com/Morero/items/473bc26ce2200c6a6fc6) ← これあとで別途やるかも..

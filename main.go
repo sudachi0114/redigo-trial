@@ -21,7 +21,7 @@ func main() {
 }
 
 func Connection() redis.Conn {
-	const Addr = "127.0.0.1:6379"
+	const Addr = "redis:6379"
 
 	c, err := redis.Dial("tcp", Addr)
 	if err != nil {
