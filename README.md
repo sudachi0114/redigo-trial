@@ -148,6 +148,25 @@ SETはデータを格納するためのコマンドです。 -->
 - `EX`オプション* 指定した秒数後にデータが消去される。`EX` オプションを使用してキーの `TTL` を設定できる。(今回は120秒に設定する)
 - `redigo/redis` では、KEY がすでに存在する場合、 `“ok”` ではなく `nil` の値を返す。これを用いて接続を試みたユーザーが既にオンラインかどうかを判断しています。
 
+> TTLとは
+> TTL は Time to Live の略で、日本語では有効生存期間、あるいは単に生存時間ということがある。
+> ユーザーが設定した時間内に戻ってキーをリセットしない限り、自動で削除されるよう、キーのEXPIRE(有効期限)を設定しましょう。
+
+⬇️ で `KEY` に設定された TTL の残り時間を確認できる。
+
+```
+TTL {{key}}
+```
+
+また、`TTL` は `EXPIRE` でも設定できる
+
+```
+> SET {{key}} EX {{sec}}
+
+> EXPIRE {{key}} {{sec}}
+```
+
+
 
 ## Links
 * [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
@@ -156,6 +175,7 @@ SETはデータを格納するためのコマンドです。 -->
 ### Redis
 * [Redisの起動と停止](https://qiita.com/horiko/items/bc812a03c9e0566d6338)
 * [Redisで発生したメモリ不足エラーの調査メモ](http://www.24w.jp/blog/?p=82)
+* [Redis Command - TTL(指定したキーの有効期間を確認)](https://symfoware.blog.fc2.com/blog-entry-531.html)
 
 ### docker-compose
 * [docker-composeでredis環境をつくる](https://qiita.com/uggds/items/5e4f8fee180d77c06ee1)
