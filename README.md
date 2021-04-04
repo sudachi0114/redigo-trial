@@ -109,6 +109,45 @@ sudachi@DaiMac:redigo-trial (develop *)
 これをチャットとして使えるようにしていく。
 [参考](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)を写経しながら
 
+## Redis
+
+* プロセス
+
+```
+$ redis-server
+```
+
+* cli client
+
+```
+$ redis-cli
+```
+
+* 登録されている KEY を取得
+
+```
+> KEYS *
+```
+
+* 登録されている KEY の Value を取得
+
+```
+> GET hoge
+```
+
+* `KEY: hoge, Value: fuga` を登録
+
+```
+> SET hoge fuga
+```
+
+SET のオプション (?)
+<!-- conn.DoでSETを実行しRedisに対して値を書き込みます。 
+SETはデータを格納するためのコマンドです。 -->
+- `NX` オプション: 同じ key が存在しない場合のみ、保存する。
+- `EX`オプション* 指定した秒数後にデータが消去される。`EX` オプションを使用してキーの `TTL` を設定できる。(今回は120秒に設定する)
+- `redigo/redis` では、KEY がすでに存在する場合、 `“ok”` ではなく `nil` の値を返す。これを用いて接続を試みたユーザーが既にオンラインかどうかを判断しています。
+
 
 ## Links
 * [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
