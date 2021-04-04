@@ -5,9 +5,14 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/sudachi0114/redigo-trial/infra"
 )
 
 func main() {
+	c := infra.Connection()
+	defer c.Close()
+
 	prompt := "(屮`･д･)屮 "
 	bio := bufio.NewReader(os.Stdin)
 	for {
