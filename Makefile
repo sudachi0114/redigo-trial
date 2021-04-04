@@ -26,3 +26,7 @@ compose/down:
 .PHONY: compose/build
 compose/build:
 	docker-compose build app
+
+.PHONY: clean
+clean: compose/down
+	rm -rf bin

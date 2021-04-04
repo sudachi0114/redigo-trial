@@ -11,20 +11,6 @@ Trial connecting and operating Redis from Go client.
 ```shell
 # mac
 $ brew install redis
-
-Warning: Treating redis as a formula. For the cask, use homebrew/cask/redis
-==> Downloading https://homebrew.bintray.com/bottles/redis-6.2.1.catalina.bottle
-==> Downloading from https://d29vzk4ow07wi7.cloudfront.net/81c2a841e0b19040e7ea9
-######################################################################## 100.0%
-==> Pouring redis-6.2.1.catalina.bottle.tar.gz
-==> Caveats
-To have launchd start redis now and restart at login:
-  brew services start redis
-Or, if you don't want/need a background service you can just run:
-  redis-server /usr/local/etc/redis.conf
-==> Summary
-🍺  /usr/local/Cellar/redis/6.2.1: 13 files, 2.0MB
-
 ```
 
 FIXME: local でやろうとしたら見知らぬエラーが出てしまった。
@@ -109,6 +95,90 @@ sudachi@DaiMac:redigo-trial (develop *)
 これをチャットとして使えるようにしていく。
 [参考](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)を写経しながら
 
+## Redis
+
+* プロセス
+
+```
+$ redis-server
+```
+
+* cli client
+
+```
+$ redis-cli
+```
+
+* 登録されている KEY を取得
+
+```
+> KEYS *
+```
+
+### 文字列
+
+* 登録されている KEY の Value を取得
+
+```
+> GET hoge
+```
+
+* `KEY: hoge, Value: fuga` を登録
+
+```
+> SET hoge fuga
+```
+
+SET のオプション (?)
+<!-- conn.DoでSETを実行しRedisに対して値を書き込みます。 
+SETはデータを格納するためのコマンドです。 -->
+- `NX` オプション: 同じ key が存在しない場合のみ、保存する。
+- `EX`オプション* 指定した秒数後にデータが消去される。`EX` オプションを使用してキーの `TTL` を設定できる。(今回は120秒に設定する)
+- `redigo/redis` では、KEY がすでに存在する場合、 `“ok”` ではなく `nil` の値を返す。これを用いて接続を試みたユーザーが既にオンラインかどうかを判断しています。
+
+> TTLとは
+> TTL は Time to Live の略で、日本語では有効生存期間、あるいは単に生存時間ということがある。
+> ユーザーが設定した時間内に戻ってキーをリセットしない限り、自動で削除されるよう、キーのEXPIRE(有効期限)を設定しましょう。
+
+⬇️ で `KEY` に設定された TTL の残り時間を確認できる。
+
+```
+TTL {{key}}
+```
+
+また、`TTL` は `EXPIRE` でも設定できる
+
+```
+> SET {{key}} EX {{sec}}
+
+> EXPIRE {{key}} {{sec}}
+```
+
+### セット
+
+* セットに member を追加
+
+```
+> SADD key member [member ...]
+```
+
+* セットの member 一覧を取得
+
+```
+> SMEMBERS key
+```
+
+* セットの member 数を取得
+
+```
+> SCARD key
+```
+
+今回は「ユーザーリスト」にセットを使っている。
+> ユーザー名を SADD コマンドを使い users というリストにデータを追加していきます。
+> `val, err = conn.Do(“SADD”, “users”, userName)`
+> users というリストで接続したことあるユーザーを保存していきます。key/value をいつ更新するかをリマインドさせるGoのTickerをtimeパッケージのNewTickerを使い設定しましょう。
+
 
 ## Links
 * [GoとRedisにおける簡単なチャットアプリケーション](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)
@@ -117,6 +187,7 @@ sudachi@DaiMac:redigo-trial (develop *)
 ### Redis
 * [Redisの起動と停止](https://qiita.com/horiko/items/bc812a03c9e0566d6338)
 * [Redisで発生したメモリ不足エラーの調査メモ](http://www.24w.jp/blog/?p=82)
+* [Redis Command - TTL(指定したキーの有効期間を確認)](https://symfoware.blog.fc2.com/blog-entry-531.html)
 
 ### docker-compose
 * [docker-composeでredis環境をつくる](https://qiita.com/uggds/items/5e4f8fee180d77c06ee1)
