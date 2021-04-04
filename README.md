@@ -115,6 +115,8 @@ $ redis-cli
 > KEYS *
 ```
 
+### 文字列
+
 * 登録されている KEY の Value を取得
 
 ```
@@ -152,6 +154,30 @@ TTL {{key}}
 > EXPIRE {{key}} {{sec}}
 ```
 
+### セット
+
+* セットに member を追加
+
+```
+> SADD key member [member ...]
+```
+
+* セットの member 一覧を取得
+
+```
+> SMEMBERS key
+```
+
+* セットの member 数を取得
+
+```
+> SCARD key
+```
+
+今回は「ユーザーリスト」にセットを使っている。
+> ユーザー名を SADD コマンドを使い users というリストにデータを追加していきます。
+> `val, err = conn.Do(“SADD”, “users”, userName)`
+> users というリストで接続したことあるユーザーを保存していきます。key/value をいつ更新するかをリマインドさせるGoのTickerをtimeパッケージのNewTickerを使い設定しましょう。
 
 
 ## Links
