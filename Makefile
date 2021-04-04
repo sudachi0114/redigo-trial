@@ -8,7 +8,7 @@ build:
 
 
 .PHONY: compose/up
-compose/up: compose/up/redis
+compose/up: compose/build compose/up/redis
 	docker-compose up -d app
 
 .PHONY: compose/up/sh
@@ -26,3 +26,7 @@ compose/down:
 .PHONY: compose/build
 compose/build:
 	docker-compose build app
+
+.PHONY: clean
+clean: compose/down
+	rm -rf bin
