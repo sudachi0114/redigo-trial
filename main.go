@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-	c := infra.Connection()
-	defer c.Close()
+	conn := infra.Connection()
+	defer conn.Close()
 
 	prompt := "(屮`･д･)屮 "
 	bio := bufio.NewReader(os.Stdin)
@@ -29,9 +29,7 @@ func main() {
 		if maybeMessage == ".exit" {
 			return
 		} else if strings.Contains(maybeMessage, ".create") {
-			splited := strings.Split(maybeMessage, " ")
-			userName := splited[1]
-			fmt.Println("created user:", userName)
+			infra.CreateUser(maybeMessage, conn)
 		} else {
 			fmt.Println(maybeMessage)
 		}
