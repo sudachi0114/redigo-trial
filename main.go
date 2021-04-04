@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -22,6 +23,10 @@ func main() {
 
 		if maybeMessage == ".exit" {
 			return
+		} else if strings.Contains(maybeMessage, ".create") {
+			splited := strings.Split(maybeMessage, " ")
+			userName := splited[1]
+			fmt.Println("created user:", userName)
 		} else {
 			fmt.Println(maybeMessage)
 		}
