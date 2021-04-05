@@ -2,6 +2,7 @@ package infra
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/gomodule/redigo/redis"
@@ -11,25 +12,28 @@ func CreateUser(message string, conn redis.Conn) {
 	splited := strings.Split(message, " ")
 	username := splited[1]
 
-	userkey := "online." + username
-	res, err := conn.Do("SET", userkey, username, "NX", "EX", "120")
+	userkey := username // FIXME: 果たしてこんなデータに意味はあるのだろうか..
+	res, err := conn.Do("SET", userkey, username)
 	if err != nil {
 		panic(err) // redis.String(conn.Do()) にして、何回か同じユーザの登録をリクエストすると、ここでパニックする..??
 	}
 
 	if res == nil {
-		fmt.Printf("User %s has already online.\n", username)
+		fmt.Printf("username %s has already used.\n", username)
 	} else {
 		fmt.Printf("Create User:[%s] | status:[%s].\n", username, res)
 		AddtoUserGroup(username, conn)
 	}
 }
 
-func AddtoUserGroup(user string, conn redis.Conn) string {
+func AddtoUserGroup(user string, conn redis.Conn) {
 	res, err := redis.String(conn.Do("SADD", "users", user))
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Added user: %s to group: users\n", user)
-	return res
+	if reflect.TypeOf(res) == reflect.TypeOf(0) {
+		fmt.Printf("user: %s has already in group: users\n", user)
+	} else {
+		fmt.Printf("Added user: %s to group: users\n", user)
+	}
 }
