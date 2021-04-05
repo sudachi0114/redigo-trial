@@ -19,7 +19,7 @@ func main() {
 	conn := infra.Connection()
 	defer conn.Close()
 
-	tickerChan := time.NewTicker(time.Millisecond * 1000).C
+	tickerChan := time.NewTicker(time.Second * 60).C
 
 	sayChan := make(chan string)
 	go func() {
@@ -43,6 +43,13 @@ func main() {
 	for !chatExit {
 		select {
 		case <-tickerChan:
+			if userkey != "" && username != "" {
+				res, err := conn.Do("SET", userkey, username, "XX", "EX", "120")
+				if err != nil || res == nil {
+					fmt.Println("Heartbeat set failed..")
+					chatExit = true
+				}
+			}
 		case maybeMessage := <-sayChan:
 			if maybeMessage == ".exit" {
 				chatExit = true
