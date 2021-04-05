@@ -30,5 +30,6 @@ func AddtoUserGroup(user string, conn redis.Conn) string {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("Added user: %s to group: users\n", user)
 	return res
 }
