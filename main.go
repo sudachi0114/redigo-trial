@@ -5,33 +5,64 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/sudachi0114/redigo-trial/infra"
+)
+
+var (
+	username string
+	userkey  string
 )
 
 func main() {
 	conn := infra.Connection()
 	defer conn.Close()
 
-	prompt := "(屮`･д･)屮 "
-	bio := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Print(prompt)
+	tickerChan := time.NewTicker(time.Second * 60).C
 
-		line, _, err := bio.ReadLine()
-		maybeMessage := string(line)
+	sayChan := make(chan string)
+	go func() {
+		prompt := "(屮`･д･)屮 "
+		bio := bufio.NewReader(os.Stdin)
+		for {
+			fmt.Print(prompt)
 
-		if err != nil {
-			fmt.Println(err)
-			return
+			line, _, err := bio.ReadLine()
+			if err != nil {
+				fmt.Println(err)
+				sayChan <- ".exit"
+				return
+			}
+			sayChan <- string(line)
 		}
+	}()
 
-		if maybeMessage == ".exit" {
-			return
-		} else if strings.Contains(maybeMessage, ".create") {
-			infra.CreateUser(maybeMessage, conn)
-		} else {
-			fmt.Println(maybeMessage)
+	chatExit := false
+
+	for !chatExit {
+		select {
+		case <-tickerChan:
+			if userkey != "" && username != "" {
+				res, err := conn.Do("SET", userkey, username, "XX", "EX", "120")
+				if err != nil || res == nil {
+					fmt.Println("Heartbeat set failed..")
+					chatExit = true
+				}
+			}
+		case maybeMessage := <-sayChan:
+			if maybeMessage == ".exit" {
+				chatExit = true
+			} else if strings.Contains(maybeMessage, ".create") {
+				infra.CreateUser(maybeMessage, conn)
+			} else if strings.Contains(maybeMessage, ".login") {
+				username, userkey = infra.Login(maybeMessage, conn)
+				fmt.Println("return:", username, userkey)
+			} else if maybeMessage == ".whoami" {
+				fmt.Printf("%s (key: %s)", username, userkey)
+			} else {
+				fmt.Println(maybeMessage)
+			}
 		}
 	}
 }
