@@ -74,6 +74,7 @@ func main() {
 			}
 		case maybeMessage := <-sayChan:
 			if maybeMessage == ".exit" {
+				infra.ExitUser(userkey, username, conn)
 				chatExit = true
 			} else if strings.Contains(maybeMessage, ".create") {
 				infra.CreateUser(maybeMessage, conn)
