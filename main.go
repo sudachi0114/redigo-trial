@@ -4,9 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/sudachi0114/redigo-trial/infra"
+)
+
+var (
+	username string
+	userkey  string
 )
 
 func main() {
@@ -40,13 +46,16 @@ func main() {
 		case maybeMessage := <-sayChan:
 			if maybeMessage == ".exit" {
 				chatExit = true
+			} else if strings.Contains(maybeMessage, ".create") {
+				infra.CreateUser(maybeMessage, conn)
+			} else if strings.Contains(maybeMessage, ".login") {
+				username, userkey = infra.Login(maybeMessage, conn)
+				fmt.Println("return:", username, userkey)
+			} else if maybeMessage == ".whoami" {
+				fmt.Printf("%s (key: %s)", username, userkey)
 			} else {
 				fmt.Println(maybeMessage)
 			}
-			// 	} else if strings.Contains(maybeMessage, ".create") {
-			// 		username, userkey := infra.CreateUser(maybeMessage, conn)
-			// 		fmt.Println("return:", username, userkey)
-			// }}
 		}
 	}
 }
