@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gomodule/redigo/redis"
 	"github.com/sudachi0114/redigo-trial/infra"
 )
 
@@ -38,6 +39,27 @@ func main() {
 		}
 	}()
 
+	// PubSub の sub <- subscribe channel
+	subChan := make(chan string)
+	go func() {
+		subConn := infra.Connection()
+		defer subConn.Close()
+
+		// pub/sub connection
+		psc := redis.PubSubConn{Conn: subConn}
+		psc.Subscribe("messages")
+		for {
+			switch v := psc.Receive().(type) {
+			case redis.Message:
+				subChan <- string(v.Data)
+			case redis.Subscription:
+				break
+			case error:
+				return
+			}
+		}
+	}()
+
 	chatExit := false
 
 	for !chatExit {
@@ -61,8 +83,11 @@ func main() {
 			} else if maybeMessage == ".whoami" {
 				fmt.Printf("%s (key: %s)", username, userkey)
 			} else {
-				fmt.Println(maybeMessage)
+				message := "[" + username + "] < " + maybeMessage
+				conn.Do("PUBLISH", "messages", message)
 			}
+		case msg := <-subChan:
+			fmt.Println(msg)
 		}
 	}
 }
