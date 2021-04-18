@@ -24,7 +24,7 @@ func main() {
 
 	sayChan := make(chan string)
 	go func() {
-		prompt := "(屮`･д･)屮 "
+		prompt := ">>> "
 		bio := bufio.NewReader(os.Stdin)
 		for {
 			fmt.Print(prompt)
@@ -80,7 +80,6 @@ func main() {
 				infra.CreateUser(maybeMessage, conn)
 			} else if strings.Contains(maybeMessage, ".login") {
 				username, userkey = infra.Login(maybeMessage, conn)
-				fmt.Println("return:", username, userkey)
 			} else if maybeMessage == ".whoami" {
 				fmt.Printf("%s (key: %s)", username, userkey)
 			} else {
