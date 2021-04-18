@@ -76,7 +76,7 @@ $ make compose/up/sh
 /app # make
 go build -o bin/main .
 ./bin/main
-(屮`･д･)屮 
+>>> 
 ```
 
 * **コマンド**
@@ -84,27 +84,27 @@ go build -o bin/main .
 * `.whoami`
 
 ```
-(屮`･д･)屮 .whoami
-(屮`･д･)屮  (key: )
+>>> .whoami
+>>>  (key: )
 ```
 
 * `.login`
 
 ```
 .login sudachi
-(屮`･д･)屮 Logined User:[sudachi] | status:[OK].
+>>> Logined User:[sudachi] | status:[OK].
 sudachi
 return: sudachi online.sudachi
 
 .whoami
-(屮`･д･)屮 sudachi (key: online.sudachi)
+>>> sudachi (key: online.sudachi)
 ```
 
 * `.exit`
 
 ```
 .exit
-(屮`･д･)屮 /app # 
+>>> /app # 
 /app # 
 ```
 
@@ -119,16 +119,16 @@ sudachi has left.
 ```
 # when not login
 
-(屮`･д･)屮 [] < 
+>>> [] < 
 hoge
-(屮`･д･)屮 [] < hoge
+>>> [] < hoge
 
 
 # when login
 
-(屮`･д･)屮 [sudachi] < 
+>>> [sudachi] < 
 hoge
-(屮`･д･)屮 [sudachi] < hoge
+>>> [sudachi] < hoge
 ```
 
 他のユーザがメッセージを送信したとき
