@@ -68,32 +68,76 @@ $ go get github.com/gomodule/redigo/redis
 $ make compose/up/sh
 ```
 
-* 使用例 (現在はおうむ返しするだけ)
+### 使用例
+
+* チャットを開始する
 
 ```
-# ... (略)
-
 /app # make
 go build -o bin/main .
 ./bin/main
-(屮`･д･)屮 hoge
-hoge
-(屮`･д･)屮 fuga
-fuga
-(屮`･д･)屮 piyo
-piyo
-(屮`･д･)屮 nyan
-nyan
-(屮`･д･)屮 exit
-exit
-(屮`･д･)屮 .exit
-/app # exit
-sudachi@DaiMac:redigo-trial (develop *)
-(*'-') < 
+(屮`･д･)屮 
 ```
 
-これをチャットとして使えるようにしていく。
-[参考](https://medium.com/eureka-engineering/go-redis-application-28c8c793a652)を写経しながら
+* **コマンド**
+
+* `.whoami`
+
+```
+(屮`･д･)屮 .whoami
+(屮`･д･)屮  (key: )
+```
+
+* `.login`
+
+```
+.login sudachi
+(屮`･д･)屮 Logined User:[sudachi] | status:[OK].
+sudachi
+return: sudachi online.sudachi
+
+.whoami
+(屮`･д･)屮 sudachi (key: online.sudachi)
+```
+
+* `.exit`
+
+```
+.exit
+(屮`･д･)屮 /app # 
+/app # 
+```
+
+他のユーザが `.exit` すると、メッセージが送信される
+
+```
+sudachi has left.
+```
+
+* **メッセージの送信**
+
+```
+# when not login
+
+(屮`･д･)屮 [] < 
+hoge
+(屮`･д･)屮 [] < hoge
+
+
+# when login
+
+(屮`･д･)屮 [sudachi] < 
+hoge
+(屮`･д･)屮 [sudachi] < hoge
+```
+
+他のユーザがメッセージを送信したとき
+
+```
+[sudachi] < hoge
+[sudachi] < hello
+```
+
 
 ## Redis
 
