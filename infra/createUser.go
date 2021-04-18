@@ -21,7 +21,8 @@ func CreateUser(message string, conn redis.Conn) {
 	if res == nil {
 		fmt.Printf("username %s has already used.\n", username)
 	} else {
-		fmt.Printf("Create User:[%s] | status:[%s].\n", username, res)
+		message := fmt.Sprintf("[system] Create User: %s | status: %s.", username, res)
+		conn.Do("PUBLISH", "messages", message)
 		// FIXME: AddtoUserGroup(username, conn)
 	}
 }

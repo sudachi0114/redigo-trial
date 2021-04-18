@@ -24,8 +24,8 @@ func Login(message string, conn redis.Conn) (string, string) {
 	if res == nil {
 		fmt.Printf("User %s has already online.\n", username)
 	} else {
-		fmt.Printf("Logined User:[%s] | status:[%s].\n", username, res)
-		fmt.Println(username)
+		message := username + " has joined."
+		conn.Do("PUBLISH", "messages", message)
 	}
 
 	return username, userkey
